@@ -11,7 +11,7 @@ angular
 		$scope.temp_todos = window.localStorage.getItem('todos');
 		
 		// set todos variable with the cache variable
-		$scope.todos = (window.localStorage.getItem('todos') !== null) ? JSON.parse($scope.temp_todos) : [{name: "Learn AngularJS",added: Date.now(),done: false	},{	name: "Learn NodeJs",added: Date.now(),	done: false	},{name: "Learn Web Services",added: Date.now(),done: false}];
+		$scope.todos = (window.localStorage.getItem('todos') !== null) ? JSON.parse($scope.temp_todos) : [{name: "Learn AngularJS",added: Date.now(),done: false, eitable:false},{	name: "Learn NodeJs",added: Date.now(),	done: false, eitable:false	},{name: "Learn Web Services",added: Date.now(),done: false, eitable:false}];
 		
 		// saved to a local storage
 		window.localStorage.setItem('todos', JSON.stringify($scope.todos));
@@ -34,8 +34,19 @@ angular
 			window.localStorage.setItem('todos', JSON.stringify($scope.todos));
 		}
 		
-		$scope.updateTodo = function($index){
-			alert('Edit function is in progress.');
+		$scope.updateTodo = function($index, $name){
+			if((event.keyCode == 13 || event.which == 13) && $name.length > 0){
+				$scope.todos[$index].name = $name;
+				$scope.todos[$index].editable = !$scope.todos[$index].editable;
+				
+				window.localStorage.removeItem('todos');
+				window.localStorage.setItem('todos', JSON.stringify($scope.todos));
+			}
+		}
+		
+		$scope.editMode = function($index){
+			$scope.tempName = $scope.todos[$index].name;
+			$scope.todos[$index].editable = !$scope.todos[$index].editable;
 		}
 		
 		//count number of todos

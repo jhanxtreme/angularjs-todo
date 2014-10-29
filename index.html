@@ -36,9 +36,10 @@
 	
 	<ul class="list-group" ng-if="hasTodos()">
 		<li class="list-group-item" ng-repeat="todo in todos track by $index">
-			{{todo.name}} 
+			<span ng-hide="todo.editable">{{todo.name}}</span>
+			<input type="text" ng-model="tempName" ng-show="todo.editable" ng-keyup="updateTodo($index, tempName)" />
 			<span class="badge" ng-click="deleteTodo($index)">delete</span>
-			<span class="badge" ng-click="updateTodo($index)">edit</span>
+			<span class="badge" ng-click="editMode($index)">edit</span>
 			
 		</li>
 	</ul>
