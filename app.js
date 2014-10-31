@@ -4,7 +4,7 @@ angular
 	.module('TodoApp', [])
 	.controller('TodoController', ['$scope', function($scope){
 		$scope.header_title = "Jhan Mateo's ToDo Application";
-		$scope.short_description = "This is a simple To-Do list application using AngularJS. It uses local storage to save data.";
+		$scope.short_description = "This is a simple To-Do list application using AngularJS.";
 		
 		// saved to a temporary cache variable
 		$scope.temp_todos = window.localStorage.getItem('todos');
@@ -46,9 +46,14 @@ angular
 			$scope.todos[$index].editable = !$scope.todos[$index].editable;
 		}
 		
-		//count number of todos
+		
 		$scope.hasTodos = function(){
 			return ($scope.todos.length) ? true : false;
+		}
+
+		//count number of todos
+		$scope.countTodos = function(){
+			return $scope.todos.length;
 		}
 		
 	}]);

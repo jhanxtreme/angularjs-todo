@@ -25,28 +25,36 @@
   </head>
   <body>
 	 
-	<div class="container" ng-controller="TodoController">
-	<h1>{{ header_title }}</h1>	
-	<p>{{ short_description }}</p>
+	<div class="container-fluid" ng-controller="TodoController">
 	
-	<div class="form-group">
-	 <input type="text" ng-model="newTodo" ng-keyup="addTodo()" class="form-control" placeholder="Enter new todo here." />
-
-	</div>
-	
-	<ul class="list-group" ng-if="hasTodos()">
-		<li class="list-group-item" ng-repeat="todo in todos track by $index">
-			<span ng-hide="todo.editable">{{todo.name}}</span>
-			<input type="text" ng-model="todo.name" ng-show="todo.editable" ng-keyup="updateTodo($index)" />
-			<span class="badge" ng-click="deleteTodo($index)">delete</span>
-			<span class="badge" ng-click="editMode($index)">edit</span>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<h3 class="text-center">{{ header_title }}</h3>	
+			<p class="text-center">{{ short_description }}</p>
 			
-		</li>
-	</ul>
-	
-	<div ng-if="!hasTodos()" >
+			<div class="form-group">
+			 <input type="text" ng-model="newTodo" ng-keyup="addTodo()" class="form-control" placeholder="Enter new todo here." />
+			</div>
 
-	<p class="text-warning"><strong>List is empty.</strong></p>
+			<div class="alert alert-info text-center" role="alert">
+				You've got {{ countTodos() }} things to do
+			</div>
+			
+			<ul class="list-group" ng-if="hasTodos()">
+				<li class="list-group-item" ng-repeat="todo in todos track by $index">
+					<span ng-hide="todo.editable">{{todo.name}}</span>
+					<input type="text" ng-model="todo.name" ng-show="todo.editable" ng-keyup="updateTodo($index)" />
+					<span class="badge" ng-click="deleteTodo($index)">delete</span>
+					<span class="badge" ng-click="editMode($index)">edit</span>
+					
+				</li>
+			</ul>
+			
+			<div ng-if="!hasTodos()" >
+
+			<p class="text-warning"><strong>List is empty.</strong></p>
+			</div>
+		</div>
 	</div>
 		
 
