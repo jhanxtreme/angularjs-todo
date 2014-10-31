@@ -4,7 +4,6 @@ angular
 	.module('TodoApp', [])
 	.controller('TodoController', ['$scope', function($scope){
 		$scope.header_title = "Jhan Mateo's ToDo Application";
-		$scope.newTodo = '';
 		$scope.short_description = "This is a simple To-Do list application using AngularJS. It uses local storage to save data.";
 		
 		// saved to a temporary cache variable
@@ -34,9 +33,8 @@ angular
 			window.localStorage.setItem('todos', JSON.stringify($scope.todos));
 		}
 		
-		$scope.updateTodo = function($index, $name){
-			if((event.keyCode == 13 || event.which == 13) && $name.length > 0){
-				$scope.todos[$index].name = $name;
+		$scope.updateTodo = function($index){
+			if((event.keyCode == 13 || event.which == 13) && $scope.todos[$index].name.length > 0){
 				$scope.todos[$index].editable = !$scope.todos[$index].editable;
 				
 				window.localStorage.removeItem('todos');
@@ -45,7 +43,6 @@ angular
 		}
 		
 		$scope.editMode = function($index){
-			$scope.tempName = $scope.todos[$index].name;
 			$scope.todos[$index].editable = !$scope.todos[$index].editable;
 		}
 		
