@@ -2,18 +2,33 @@
 	
 angular
 	.module('TodoApp', [])
-	.controller('TodoController', ['$scope', function($scope){
+
+
+	/* services */
+	.factory('todoData', function(){
+
+		// saved to a temporary cache variable
+		var temp_todos = window.localStorage.getItem('todos');
+
+		// set todos variable with the cache variable
+		var todos = (window.localStorage.getItem('todos') !== null) ? JSON.parse(temp_todos) : [{name: "Learn AngularJS",added: Date.now(),done: false, eitable:false},{	name: "Learn NodeJs",added: Date.now(),	done: false, eitable:false	},{name: "Learn Web Services",added: Date.now(),done: false, eitable:false}];
+		
+		// saved to a local storage
+		window.localStorage.setItem('todos', JSON.stringify(todos));
+
+		// return the data
+		return { data: todos }
+
+	})
+
+	/* controller */
+	.controller('TodoController', ['$scope', 'todoData', function($scope, todoData){
 		$scope.header_title = "Jhan Mateo's ToDo Application";
 		$scope.short_description = "This is a simple To-Do list application using AngularJS.";
 		
-		// saved to a temporary cache variable
-		$scope.temp_todos = window.localStorage.getItem('todos');
-		
 		// set todos variable with the cache variable
-		$scope.todos = (window.localStorage.getItem('todos') !== null) ? JSON.parse($scope.temp_todos) : [{name: "Learn AngularJS",added: Date.now(),done: false, eitable:false},{	name: "Learn NodeJs",added: Date.now(),	done: false, eitable:false	},{name: "Learn Web Services",added: Date.now(),done: false, eitable:false}];
+		$scope.todos = todoData.data;
 		
-		// saved to a local storage
-		window.localStorage.setItem('todos', JSON.stringify($scope.todos));
 		
 		// add new todo list		
 		$scope.addTodo = function(){
