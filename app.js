@@ -7,17 +7,22 @@ angular
 	/* services */
 	.factory('todoData', function(){
 
-		// saved to a temporary cache variable
-		var temp_todos = window.localStorage.getItem('todos');
+		return { 
+				data: function(){
 
-		// set todos variable with the cache variable
-		var todos = (window.localStorage.getItem('todos') !== null) ? JSON.parse(temp_todos) : [{name: "Learn AngularJS",added: Date.now(),done: false, eitable:false},{	name: "Learn NodeJs",added: Date.now(),	done: false, eitable:false	},{name: "Learn Web Services",added: Date.now(),done: false, eitable:false}];
-		
-		// saved to a local storage
-		window.localStorage.setItem('todos', JSON.stringify(todos));
+					// saved to a temporary cache variable
+					var temp_todos = window.localStorage.getItem('todos');
 
-		// return the data
-		return { data: todos }
+					// set todos variable with the cache variable
+					var todos = (window.localStorage.getItem('todos') !== null) ? JSON.parse(temp_todos) : [{name: "Learn AngularJS",added: Date.now(),done: false, eitable:false},{	name: "Learn NodeJs",added: Date.now(),	done: false, eitable:false	},{name: "Learn Web Services",added: Date.now(),done: false, eitable:false}];
+					
+					// saved to a local storage
+					window.localStorage.setItem('todos', JSON.stringify(todos));
+
+					// return the data
+					return todos;
+				} 
+		}
 
 	})
 
@@ -27,7 +32,7 @@ angular
 		$scope.short_description = "This is a simple To-Do list application using AngularJS.";
 		
 		// set todos variable with the cache variable
-		$scope.todos = todoData.data;
+		$scope.todos = todoData.data();
 		
 		
 		// add new todo list		
