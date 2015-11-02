@@ -1,3 +1,5 @@
+'use strict';
+
 (function(){
 	
 angular
@@ -8,74 +10,83 @@ angular
 	.factory('todoData', function(){
 
 		return { 
-				data: function(){
+				getData: function(){
+
+					var defaul_todos = [{name: "Learn AngularJS",added: Date.now(),done: false, editable: false, eitable:false},{	name: "Learn NodeJs",added: Date.now(),	done: false, eitable:false	},{name: "Learn Web Services",added: Date.now(),done: false, editable:false}];
 
 					// saved to a temporary cache variable
 					var temp_todos = window.localStorage.getItem('todos');
 
 					// set todos variable with the cache variable
-					var todos = (window.localStorage.getItem('todos') !== null) ? JSON.parse(temp_todos) : [{name: "Learn AngularJS",added: Date.now(),done: false, eitable:false},{	name: "Learn NodeJs",added: Date.now(),	done: false, eitable:false	},{name: "Learn Web Services",added: Date.now(),done: false, eitable:false}];
+					var todos = (temp_todos !== null) ? JSON.parse(temp_todos) : defaul_todos;
 					
 					// saved to a local storage
 					window.localStorage.setItem('todos', JSON.stringify(todos));
 
 					// return the data
 					return todos;
-				} 
+				},
+				add: function(newTodo, todos){
+					if((event.keyCode == 13 || event.which == 13) && newTodo.length){
+						todos.push({name: newTodo,added: Date.now(), done: false, editable:false	});
+						newTodo = '';
+						window.localStorage.setItem('todos', JSON.stringify(todos));
+					}
+
+				},
+				update: function($index, todos){
+					if((event.keyCode == 13 || event.which == 13) && todos[$index].name.length > 0){
+						todos[$index].editable = !todos[$index].editable;
+						window.localStorage.setItem('todos', JSON.stringify(todos));
+					}
+				},
+				remove: function(index, todos){
+					todos.splice(index,1);
+					window.localStorage.setItem('todos', JSON.stringify(todos));
+				}
 		}
 
 	})
 
 	/* controller */
-	.controller('TodoController', ['$scope', 'todoData', function($scope, todoData){
-		$scope.header_title = "Jhan Mateo's ToDo Application";
-		$scope.short_description = "This is a simple To-Do list application using AngularJS.";
-		
+	.controller('TodoController', ['todoData', function(todoData){
+		this.header_title = "Jhan Mateo's ToDo Application";
+		this.short_description = "This is a simple To-Do list application using AngularJS.";
+	
 		// set todos variable with the cache variable
-		$scope.todos = todoData.data();
+		this.todos = todoData.getData();
 		
 		
 		// add new todo list		
-		$scope.addTodo = function(){
-			if((event.keyCode == 13 || event.which == 13) && $scope.newTodo.length){
-				$scope.todos.push({name: $scope.newTodo,added: Date.now(),	done: false	});
-				$scope.newTodo = '';
-				window.localStorage.setItem('todos', JSON.stringify($scope.todos));
-			}
-
-				
+		this.addTodo = function(){
+			todoData.add(this.newTodo, this.todos);
 		};
 		
 		// delete todo
-		$scope.deleteTodo = function($index){
-			$scope.todos.splice($index,1);
-			window.localStorage.removeItem('todos');
-			window.localStorage.setItem('todos', JSON.stringify($scope.todos));
+		this.deleteTodo = function($index){
+			todoData.remove($index, this.todos);
 		}
 		
-		$scope.updateTodo = function($index){
-			if((event.keyCode == 13 || event.which == 13) && $scope.todos[$index].name.length > 0){
-				$scope.todos[$index].editable = !$scope.todos[$index].editable;
-				
-				window.localStorage.removeItem('todos');
-				window.localStorage.setItem('todos', JSON.stringify($scope.todos));
-			}
+		this.updateTodo = function($index){
+			todoData.update($index, this.todos);
 		}
 		
-		$scope.editMode = function($index){
-			$scope.todos[$index].editable = !$scope.todos[$index].editable;
+		this.editMode = function($index){
+			this.todos[$index].editable = !this.todos[$index].editable;
 		}
 		
 		
-		$scope.hasTodos = function(){
-			return ($scope.todos.length) ? true : false;
+		this.hasTodos = function(){
+			return (this.todos.length) ? true : false;
 		}
 
 		//count number of todos
-		$scope.countTodos = function(){
-			return $scope.todos.length;
+		this.countTodos = function(){
+			if(this.todos===undefined || this.todos===null){
+				this.todos = [];
+			}
+			return this.todos.length;
 		}
-		
 	}]);
 	
 })();

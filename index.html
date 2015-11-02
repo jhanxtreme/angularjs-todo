@@ -18,39 +18,42 @@
     <![endif]-->
     
     <style type="text/css">
-    span.badge{
+	[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+	  display: none !important;
+	}
+	span.badge{
 		cursor:pointer;
 	}
     </style>
   </head>
   <body>
 	 
-	<div class="container-fluid" ng-controller="TodoController">
+	<div class="container-fluid" ng-controller="TodoController as vm">
 	
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3">
-			<h3 class="text-center">{{ header_title }}</h3>	
-			<p class="text-center">{{ short_description }}</p>
-			
+			<h3 class="text-center">{{ vm.header_title }}</h3>	
+			<p class="text-center">{{ vm.short_description }}</p>
+
 			<div class="form-group">
-			 <input type="text" ng-model="newTodo" ng-keyup="addTodo()" class="form-control" placeholder="Enter new todo here." />
+			 <input type="text" ng-model="vm.newTodo" ng-keyup="vm.addTodo()" class="form-control" placeholder="Enter new todo here." />
 			</div>
 
 			<div class="alert alert-info text-center" role="alert">
-				You've got {{ countTodos() }} things to do
+				You've got {{ vm.countTodos() }} things to do
 			</div>
 			
-			<ul class="list-group" ng-if="hasTodos()">
-				<li class="list-group-item" ng-repeat="todo in todos track by $index">
+			<ul class="list-group" ng-if="vm.hasTodos()">
+				<li class="list-group-item" ng-repeat="todo in vm.todos track by $index">
 					<span ng-hide="todo.editable">{{todo.name}}</span>
-					<input type="text" ng-model="todo.name" ng-show="todo.editable" ng-keyup="updateTodo($index)" />
-					<span class="badge" ng-click="deleteTodo($index)">delete</span>
-					<span class="badge" ng-click="editMode($index)">edit</span>
+					<input type="text" ng-model="todo.name" ng-show="todo.editable" ng-keyup="vm.updateTodo($index)" />
+					<span class="badge" ng-click="vm.deleteTodo($index)">delete</span>
+					<span class="badge" ng-click="vm.editMode($index)">edit</span>
 					
 				</li>
 			</ul>
 			
-			<div ng-if="!hasTodos()" >
+			<div ng-if="!vm.hasTodos()" >
 
 			<p class="text-warning"><strong>List is empty.</strong></p>
 			</div>
